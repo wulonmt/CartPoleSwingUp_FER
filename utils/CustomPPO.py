@@ -191,14 +191,15 @@ class CustomPPO(PPO):
                 _, regul_log_prob, _ = self.regul_policy.evaluate_actions(rollout_data.observations, actions)
                 FER_log_ratio = log_prob - regul_log_prob
                 FER_kl_div = th.mean((th.exp(FER_log_ratio) - 1) - FER_log_ratio)
-                FER_kl_divs.append(FER_kl_div.cpu().detach().numpy())
+                FER_kl_div_value = FER_kl_div.cpu().detach().numpy()
+                FER_kl_divs.append(FER_kl_div_value)
                 # log_ratio = log_prob - rollout_data.old_log_prob.detach()
                 # approx_kl_div = th.mean((th.exp(log_ratio) - 1) - log_ratio)
                 # approx_kl_div = -th.mean(th.exp(rollout_data.old_log_prob.detach())*log_ratio)
                 # approx_kl_divs.append(approx_kl_div.detach().cpu().numpy())
                 
                 #Cut the kl_div if larger than kl_target
-                if FER_kl_div is not None:
+                if FER_kl_div is not None and FER_kl_div_value < 2 * self.target_kl:
                     loss -= self.kl_coef * (self.target_kl - abs(self.target_kl - FER_kl_div))
                     # loss -= self.kl_coef * FER_kl_div
                 self.kl_coef = self.kl_coef * (1 - self.kl_coef_decay)
