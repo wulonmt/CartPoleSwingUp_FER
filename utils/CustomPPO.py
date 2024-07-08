@@ -200,8 +200,13 @@ class CustomPPO(PPO):
                 
                 #Cut the kl_div if larger than kl_target
                 if FER_kl_div is not None and FER_kl_div_value < 2 * self.target_kl:
-                    loss -= self.kl_coef * (self.target_kl - abs(self.target_kl - FER_kl_div))
-                    # loss -= self.kl_coef * FER_kl_div
+                    # loss -= self.kl_coef * (self.target_kl - abs(self.target_kl - FER_kl_div))
+                    loss -= self.kl_coef * FER_kl_div
+                else:
+                    continue_training = False
+                    if self.verbose >= 1:
+                        print(f"Early stopping at step {epoch} due to reaching max FER_kl: {FER_kl_div_value:.2f}")
+                    break
                 self.kl_coef = self.kl_coef * (1 - self.kl_coef_decay)
                 
                 if self.target_kl is not None and approx_kl_div > 1.5 * self.target_kl:
