@@ -11,6 +11,11 @@ register(
 )
 
 register(
+    id='CartPoleSwingUpFixInitState-v1',
+    entry_point='Env.envs:CartPoleSwingUpFixInitStateV1',
+)
+
+register(
     id='TorchCartPoleSwingUpFixInitState-v0',
     entry_point='Env.envs:TorchCartPoleSwingUpFixInitStateV0',
 )

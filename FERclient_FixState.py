@@ -24,6 +24,7 @@ from utils.CustomPPO import CustomPPO
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--log_name", help="modified log name", type=str, default ="auto")
 parser.add_argument("-s", "--save_log", help="whether save log or not", type=str, default = "True") #parser can't pass bool
+# parser.add_argument("-e", "--environment", help="which my- env been used", type=str, default="CartPoleSwingUpFixInitState-v1")
 parser.add_argument("-e", "--environment", help="which my- env been used", type=str, default="CartPoleSwingUpFixInitState-v0")
 # parser.add_argument("-e", "--environment", help="which my- env been used", type=str, default="TorchCartPoleSwingUpFixInitState-v0")
 parser.add_argument("-t", "--train", help="training or not", type=str, default = "True")
@@ -61,9 +62,9 @@ class CartPoleSwingUpClient(fl.client.NumPyClient):
                     n_epochs=10,
                     regul_update_interval = 10,
                     learning_rate=5e-4,
-                    gamma=0.8,
+                    gamma=0.99,
                     verbose=1,
-                    target_kl=0.05,
+                    target_kl=0.1,
                     ent_coef=0.,
                     kl_coef=0.3,
                     vf_coef=0.8,

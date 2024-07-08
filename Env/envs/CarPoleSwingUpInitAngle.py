@@ -162,6 +162,13 @@ class CartPoleSwingUpV0(CartPoleSwingUpEnv):
     @staticmethod
     def _reward_fn(state, action, next_state):
         return np.cos(next_state.theta, dtype=np.float32)
+    
+class CartPoleSwingUpV1(CartPoleSwingUpEnv):
+    """CartPoleSwingUp with strictly positive reward."""
+
+    @staticmethod
+    def _reward_fn(state, action, next_state):
+        return (1 + np.cos(next_state.theta, dtype=np.float32)) / 2
 
 Screen = namedtuple("Screen", "width height")
 
@@ -180,6 +187,11 @@ class CartPoleSwingUpFixInitStateV0(CartPoleSwingUpV0):
             ).astype(np.float32)
         )
         return self._get_obs(self.state), {}
+
+class CartPoleSwingUpFixInitStateV1(CartPoleSwingUpFixInitStateV0):
+    @staticmethod
+    def _reward_fn(state, action, next_state):
+        return CartPoleSwingUpV1._reward_fn(state, action, next_state)
 
 class CartPoleSwingUpViewer:
     """Class that encapsulates all the variables and objectecs needed
