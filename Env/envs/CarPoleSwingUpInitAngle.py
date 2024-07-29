@@ -149,7 +149,7 @@ class CartPoleSwingUpEnv(gym.Env):
             return None
 
         self.viewer.update(self.state, self.params.pole)
-        return self.viewer.render(return_rgb_array=mode == "rgb_array")
+        return self.viewer.render(return_rgb_array= (mode == "rgb_array" or self.render_mode == "rgb_array"))
 
     def close(self):
         if self.viewer:
